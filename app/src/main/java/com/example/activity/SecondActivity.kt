@@ -20,12 +20,22 @@ class SecondActivity : AppCompatActivity() {
         val surname: EditText = findViewById(R.id.surName)
         val button2: Button = findViewById(R.id.surnameButton)
 
+        val sharedPreferences = getSharedPreferences("Preferences", MODE_PRIVATE)
+        val edit = sharedPreferences.edit()
+
+        val ssurname = sharedPreferences.getString("surname", null)
+        surname.setText(ssurname)
+
         val button: Button = findViewById(R.id.button2)
         button.setOnClickListener {
             finish()
         }
         button2.setOnClickListener {
             val surName = surname.text.toString()
+            edit.apply {
+                putString("surname", surName)
+                apply()
+            }
             Intent(this, ThirdActivity::class.java).also {
                 it.putExtra("SurName", surName)
                 it.putExtra("Name", name)

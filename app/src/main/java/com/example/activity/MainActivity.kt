@@ -11,12 +11,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val sharedPreferences = getSharedPreferences("Preferences", MODE_PRIVATE)
+        val edit = sharedPreferences.edit()
         val name1: EditText = findViewById(R.id.editname)
         val button: Button = findViewById(R.id.button)
 
+        val name = sharedPreferences.getString("name", null)
+        name1.setText(name)
+
         button.setOnClickListener {
             val name = name1.text.toString()
+            edit.apply {
+            putString("name", name)
+                apply()
+            }
             Intent(this, SecondActivity::class.java).also {
                 it.putExtra( "Name", name)
                 startActivity(it)
@@ -32,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         val gal: Button = findViewById(R.id.gallery)
         gal.setOnClickListener {
             val intent = Intent()
-            intent.action = Intent.ACTION_VIEW
+            intent.action = Intent.ACTION_PICK
             intent.type = "image/*"
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
